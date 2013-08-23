@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>Example job to get you started. It provides a skeleton for a typical batch application.</description>
+ 	
+	<batch:job id="job1">
+		<batch:step id="step1"  >			
+			<batch:tasklet transaction-manager="transactionManager" start-limit="100" >
+				<batch:chunk reader="reader"  processor = "procesor2" writer="writer" commit-interval="1" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job> 
+	<!-- Defino el writer generador de outputs -->
+	<bean id= "writer" class = "ar.com.telefonica.ws.amdocs.engine.RecordWriterMultiplexor" >
+	<!-- 
+	
+	CAPITULO : 4.6.2.2. AutomaticJobRegistrar
+	load other appcontext
+	<property name="applicationContextFactories">
+      <bean class="org.spr...ClasspathXmlApplicationContextsFactoryBean">
+         <property name="resources" value="classpath*:/config/job*.xml" />
+      </bean>
+   </property>
+	
+	 -->
+	
+	
+	  <!-- Injeccion de los types a manejar // properties e instancia de RecordWriterMultiplexor -->
+	  <property name="typesOutput">
+			<list value-type="ar.com.telefonica.ws.amdocs.engine.OutputRecord" >
+				<ref bean="outPutTypeFile"/>
+			</list>	  
+	  </property>
+	</bean>
+	
+	<bean id="outPutTypeFile" class = "ar.com.telefonica.ws.amdocs.engine.OutputRecord">
+	<!-- Los distintos class para los tipos de Output a generar -->
+		<property name="type"><value>FileSystem</value></property>
+		<property name="sealed"><value>false</value></property>
+		<property name="attributes">
+		 <map>
+		 	<entry><key></key>
+		 		   <value>Object</value>
+		 	</entry> 
+		 	<entry><key> </key>
+		 		   <value></value>
+		 	</entry> 
+		 	<entry><key> </key>
+		 		   <value></value>
+		 	</entry> 
+		 	<entry><key> </key>
+		 		   <value></value>
+		 	</entry> 
+		 
+		 
+		 </map>
+		
+		</property>
+		
+		
+	</bean>
+	
+	
+	<!-- 
+	<batch:job id="jobF" job-repository="">
+		<batch:step id="s1">
+			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
+				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
+			</batch:tasklet>		
+		</batch:step>
+		<batch:step id="s2">
+			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
+				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
+			</batch:tasklet>		
+		</batch:step>
+	</batch:job>
+ -->
+ <!-- Launcher details removed for clarity -->
+<beans:beans id="jobLauncher"
+         class="org.springframework.batch.core.launch.support.SimpleJobLauncher" />
+ 
+</beans>
