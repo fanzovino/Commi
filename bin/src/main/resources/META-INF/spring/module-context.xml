@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>Example job to get you started. It provides a skeleton for a typical batch application.</description>
+ 	
+	<batch:job id="job1">
+		<batch:step id="step1"  >			
+			<batch:tasklet transaction-manager="transactionManager" start-limit="100" >
+				<batch:chunk reader="reader" writer="writer" commit-interval="1" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job> 
+	<!-- Defino el writer generador de outputs -->
+	<bean id= "writer" class = "ar.com.telefonica.ws.amdocs.engine.RecordWriterMultiplexor" >
+	  <!-- Injeccion de los types a manejar // properties e instancia de RecordWriterMultiplexor -->
+	  <property name="typesOutput">
+			<list value-type="ar.com.telefonica.ws.amdocs.engine.OutputRecord" >
+				<ref bean="outPutTypeFile"/>
+			
+			</list>	  
+	  </property>
+	
+	</bean>
+	
+	<bean id="outPutTypeFile" class = "ar.com.telefonica.ws.amdocs.engine.OutputRecord">
+	<!-- Los distintos class para los tipos de Output a generar -->
+		<property name="output1"><value>File1</value></property>
+		<property name="output2"><value>File2</value></property>
+		<property name="output3"><value>File3</value></property>
+		<property name="output4"><value>File4</value></property>
+		<property name="output5"><value>File5</value></property>
+	</bean>
+	
+	
+	<!-- 
+	
+	<batch:job id="jobF" job-repository="">
+		<batch:step id="s1">
+			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
+				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
+			</batch:tasklet>		
+		</batch:step>
+		<batch:step id="s2">
+			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
+				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
+			</batch:tasklet>		
+		</batch:step>
+	</batch:job>
+ -->
+</beans>
