@@ -25,13 +25,25 @@
 
 package ar.com.telefonica.ws.amdocs.engine.priv;
 
+import org.apache.log4j.Logger;
+
+// import tes.comp.integration.mapping.DVSimpleMappingManager;
+
 public class TranslationServiceBPT extends TranslationService {
+	
+	static Logger logger = Logger.getLogger(SupportServices.class);
+	
+	static TranslationServiceBPT singleton = null;
+	
+	//private MappingManager manager = null;
+	
+	
 	
 	/*
 	 * constructors:
 	 */
 	public TranslationServiceBPT(){
-		
+		this.initialize();
 	};
 	
 	
@@ -41,7 +53,7 @@ public class TranslationServiceBPT extends TranslationService {
 	 */
 	
 	// defaults:
-	private String defaultSrc = "*default*";
+	private String defaultSrc = null;
 	
 	
 	
@@ -49,6 +61,12 @@ public class TranslationServiceBPT extends TranslationService {
 	 * setters/getters	
 	 */
 	public void setDefaultOriginValue(String defaultOriginValue) throws IllegalStateException {
+		if(!this.defaultSrc.isEmpty()){
+			String errMsg = "DefaultOriginValue already initialized. Setup not allowed.";
+    		logger.warn(errMsg);
+			throw new IllegalStateException(errMsg);
+		}
+		
 		this.defaultSrc = defaultOriginValue;
 	};
 	
@@ -67,8 +85,11 @@ public class TranslationServiceBPT extends TranslationService {
 	// IMPORTANT: note that target goes **BEFORE** origin
 	//
 	public Long translateToLong (String table, String value, String target, String origin) {
-		
+
 		// TODO: transalate origin to target using BPTs libraries.
+		
+		// this.manager.getMapping(....)
+
 		
 		return new Long(value);
 	};
@@ -103,32 +124,42 @@ public class TranslationServiceBPT extends TranslationService {
 	
 	// Initialize singleton, thread safe:
 	public synchronized void initialize() {
-		
-		// TODO:
-		/*
-		// si ya existe => no hacemos nada
-		if (self.obj != null) {
-			return;
-		};
+
+		try {
+			super.initialize();
+			
+			synchronized (singleton) {
+				if (singleton != null) {
+					// TODO: Exception type
+					// throw new Exception("SupportServices: invalid constructor invocation.");
+				}
+				singleton = this;
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// inicializacion
-		self.obj = ...
-		*/
+		// this.manager = DVSimpleMappingManager.getInstance();
+		// this.manager.loadMappings();
+
 	};
 	
 	public synchronized void deinitialize() {
-		
+
 		// TODO:
+
 		/*
 		// si no existe => no hacemos nada
-		if (self.obj == null) {
+		if (self.manager == null) {
 			return;
 		};
 		
 		// deinicializacion
-		...
-		self.obj = null;
-		}
+
+		this.manager = null;
 		*/
 	};
 	

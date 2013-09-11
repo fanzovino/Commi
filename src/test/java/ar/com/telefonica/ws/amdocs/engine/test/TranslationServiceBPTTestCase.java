@@ -23,8 +23,36 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ar.com.telefonica.ws.amdocs.engine.priv.TranslationServiceBPT;
+
 public class TranslationServiceBPTTestCase {
 
+	private TranslationServiceBPT tester ;
+	
+
+	//Testeo el setteo y el get del defaultOriginValue
+	@Test
+	public void testSetDefaultOriginValueOk() {
+		String dftOriginValue = "**Default**";
+		this.tester.setDefaultOriginValue(dftOriginValue);
+		
+		assertEquals(this.tester.getDefaultOriginValue(), dftOriginValue);
+		
+	}
+	
+	@Test (expected = IllegalStateException.class)
+	public void testSetDefaultOriginValueException() {
+
+		String dftOriginValue = "**Default**";
+		this.tester.setDefaultOriginValue(dftOriginValue);
+
+		dftOriginValue = "**IsNotDefault**";
+		this.tester.setDefaultOriginValue(dftOriginValue);
+		
+		
+	}
+	
+	//TODO: Test de translator / (De)Initialize
 	@Test
 	public void testTranslateToLong() {
 		fail("Not yet implemented");
@@ -50,11 +78,7 @@ public class TranslationServiceBPTTestCase {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testSetDefaultOriginValue() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testGetDefaultOriginValue() {
 		fail("Not yet implemented");

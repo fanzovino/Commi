@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/FileProcessor.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/RecordWriterMultiplexor.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/priv/ISupportServiceExtension.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/priv/OutputRecordManagerService.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/priv/ProcessingLayer.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/priv/ProcessingLoop.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/engine/priv/TranslationServiceBPT.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/files/generic/AmdocsInputRecord.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/files/generic/AmdocsRecordReader.java=UTF-8
+encoding//src/main/java/ar/com/telefonica/ws/amdocs/commissioning/files/generic/AmdocsRecordWriter.java=UTF-8

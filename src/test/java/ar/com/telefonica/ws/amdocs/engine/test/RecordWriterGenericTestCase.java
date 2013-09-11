@@ -23,6 +23,7 @@ package ar.com.telefonica.ws.amdocs.engine.test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
@@ -79,14 +80,33 @@ public class RecordWriterGenericTestCase {
 	
 	/*
 	 * writing:
+	 * Es el encargado de generar el archivo correspondiente.
+	 * Si el Type de outputRecord enviado esta contenido dentro de los type
+	 * definidos en el contexto Spring puedo generar el archivo objectRecord.processingStatus=COMPLETE.
+	 *  Sino devuelve excepcion
 	 */
 	
 	@Test
-	public void testWrite() {
+	public void testWriteOk() {
+		ObjectRecord oRec = new ObjectRecord();
 		
-		// TODO:
+		oRec.setProcessingStatus(ObjectRecord.ProcessingStatus.PROCESSING);
 		
-		fail("Not yet implemented");
+		OutputRecord outPutRec = new OutputRecord("outPutRec", new HashMap<String, Object>());
+		oRec.addOutputRecord(outPutRec);
+		
+		this.tester = new RecordWriterGeneric();
+		this.tester.setOutPutRecList((List<OutputRecord>) outPutRec);
+		this.tester.setTypes("outPutRec");
+		
+		try {
+			this.tester.write((List<? extends ObjectRecord>) oRec);
+			assertEquals(this.tester.getObjRecord().getProcessingStatus(), ObjectRecord.ProcessingStatus.COMPLETE);
+		} catch (Exception e) {
+			fail("No se esperaba una excepcion");
+		}
+		
+		
 	}
 
 }

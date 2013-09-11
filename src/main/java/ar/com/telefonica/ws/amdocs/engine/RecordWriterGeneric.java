@@ -29,7 +29,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 
-public class RecordWriterGeneric implements IRecordWriter<ObjectRecord> {
+
+public class RecordWriterGeneric implements IRecordWriter,IRecordStream {
 	
 	static Logger logger = Logger.getLogger(RecordWriterGeneric.class);
 	
@@ -59,9 +60,19 @@ public class RecordWriterGeneric implements IRecordWriter<ObjectRecord> {
 	
 	
 	
+
+
 	/*
 	 * setters/getters:
 	 */
+	public List<OutputRecord> getOutPutRecList() {
+		return outPutRecList;
+	}
+
+	public void setOutPutRecList(List<OutputRecord> outPutRecList) {
+		this.outPutRecList = outPutRecList;
+	}
+	
 	public String getTypes() {
 		return types;
 	}
@@ -113,7 +124,7 @@ public class RecordWriterGeneric implements IRecordWriter<ObjectRecord> {
 	 */
 	
 	// Genrador del archivo final output resuelve el enigma segun la definicion del output Reader
-	public void write(List<? extends ObjectRecord> obRec) throws Exception {
+	public void write(List<ObjectRecord> obRec) throws Exception {
 		oRec = obRec.get(0);
 	    
 	    for (OutputRecord output : outPutRecList) {
@@ -124,11 +135,31 @@ public class RecordWriterGeneric implements IRecordWriter<ObjectRecord> {
 	    		GenerateFile(oRec);
 	    		
 	    	}else{
+	    		//TODO: Lo pongo en error el ObjectRecord para diferenciar? 
+	    		//oRec.setResultStatus(ObjectRecord.ResultStatus.ERROR);
 	    		String errMsg = "Undefined OutputRecord generator.";
 	    		logger.error(errMsg);
 	    		throw new Exception(errMsg);
 	    	}
 		}
+	}
+
+	@Override
+	public void open(Object context) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Object context) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 		
 	

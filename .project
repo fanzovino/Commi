@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>spring-batch-simple</name>
+	<name>Commissioning</name>
 	<comment>This plugin is an archetype that creates a command line batch sample from      Spring Batch.  Once installed you can create the archetype project      using&lt;br/&gt;&lt;pre&gt;$ mvn archetype:create -DgroupId=com.example -DartifactId=batch \  -DarchetypeGroupId=org.springframework.batch \  -DarchetypeArtifactId=spring-batch-cli -DarchetypeVersion=1.0-m3-SNAPSHOT&lt;/pre&gt;&lt;br/&gt;      Then you should be able to &quot;cd batch; mvn package exec:exec&quot;, and see the       app run.
   </comment>
 	<projects>
@@ -12,12 +12,12 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.springframework.ide.eclipse.core.springbuilder</name>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<name>org.springframework.ide.eclipse.core.springbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>

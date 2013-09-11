@@ -64,7 +64,8 @@ public class ObjectRecord {
 	public ObjectRecord() {
 	};
 	
-	public ObjectRecord(Object rawInputRecord) {
+	public ObjectRecord(String RecId,Object rawInputRecord) {
+		this.recordId = RecId;
 		this.rawInputRecord = rawInputRecord;
 	};
 	
@@ -72,6 +73,7 @@ public class ObjectRecord {
 	/*
 	 * private variables:
 	 */
+	private String recordId = null;
 	private ProcessingStatus processingStatus = ProcessingStatus.PROCESSING; 
 	private ResultStatus resultStatus = ResultStatus.DATA;	
 	private boolean sealed = false;	
@@ -109,6 +111,19 @@ public class ObjectRecord {
 	}
 	
 	
+	public String getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(String recordId) throws IllegalStateException {
+		if(this.recordId!= null){
+			String msg = "Setting recordId not allowed.";
+			logger.warn(msg);
+			throw new IllegalStateException(msg);
+		}
+		this.recordId = recordId;
+	}
+
 	// tags:
 	public Map<String, Object> getTags() {
 		return tags;
@@ -126,10 +141,10 @@ public class ObjectRecord {
 		
 		for (String key : tags.keySet()) {
 			Object value = tags.get(key);
-			if(value!= null){
-				// TODO: value = value.clone()
-				
-			}
+//			if(value!= null){
+//				// TODO: value = value.clone()
+//				
+//			}
 			this.tags.put(key, value);
 		}
 	}
@@ -201,7 +216,6 @@ public class ObjectRecord {
 	
 	public Object getInput(String key, Object def){
 		Object value = this.input.get(key);
-		
 		return value != null ? value : def ;
 	}
 	
@@ -219,7 +233,7 @@ public class ObjectRecord {
 			}catch(Exception e){
 
 				String errMsg = "El valor no es de tipo booleano.";
-				logger.warn(errMsg);
+				logger.error(errMsg);
 				throw new UnsupportedOperationException(errMsg);
 				
 			}			

@@ -56,6 +56,9 @@ public class OutputRecord {
 	 * constructors:
 	 */
 	public OutputRecord() {	}
+	public OutputRecord(OutputRecord outputRec) {
+		
+	}
 	
 	public OutputRecord(String type, Map<String, Object> attrs){
 		this.setup(type, attrs);
@@ -163,7 +166,7 @@ public class OutputRecord {
 		if (this.attributes == null) {
 			this.attributes = new HashMap<String, Object>();
 		}
-		
+		//Si el key no esta contenido en el mapa no puedo hacer el set del attr.
 		if ( ! attributes.containsKey(key)){
 			
 			String errMsg = "Attribute [" + key + "] already exists in mapping. Insert not allowed.";

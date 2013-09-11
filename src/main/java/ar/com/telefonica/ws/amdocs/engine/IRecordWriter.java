@@ -26,9 +26,9 @@ package ar.com.telefonica.ws.amdocs.engine;
 
 import java.util.List;
 
-public interface IRecordWriter<T> {
+public interface IRecordWriter {
 	
 	// processing:
-	void write(List<? extends T> items) throws Exception;
+	void write(List<ObjectRecord> items) throws Exception;
 
 }

@@ -34,7 +34,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 // import org.apache.log4j.BasicConfigurator;
 
-public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
+public class RecordWriterMultiplexor extends RecordWriterGeneric {
 
    static Logger logger = Logger.getLogger(RecordWriterMultiplexor.class);
    
@@ -55,7 +55,7 @@ public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
 	private RecordWriterGeneric generator;
 	private List<RecordWriterGeneric> writerGenericList ;
 	
-	private List<String> typesOutput ;
+	private List<OutputRecord> typesOutput ;
 	private List<ObjectRecord> oRecList = new ArrayList<ObjectRecord>();
 
 	
@@ -74,12 +74,13 @@ public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
 		this.writerGenericList = writerGenericList;
 	}
 	
-	public List<String> getTypesOutput() {
+	public List<OutputRecord> getTypesOutput() {
 		return typesOutput;
 	}
 
-	public void setTypesOutput(List<String> typesOutput) {
-		this.typesOutput = typesOutput;
+	public void setTypesOutput(List<OutputRecord> typesOutput) {
+		this.typesOutput.addAll(typesOutput);
+//		this.typesOutput = typesOutput;
 	}
 	 
 	public List<ObjectRecord> getORecList() {
@@ -99,30 +100,27 @@ public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
 	private void generateOutPutRecFile(ObjectRecord oRec) throws Exception {
 		generator = new RecordWriterGeneric();
 		generator.setObjRecord(oRec);
-		generator.write((List<? extends ObjectRecord>) oRec);
+		generator.write((List<ObjectRecord>) oRec);
 	}
 	
 	
 	// Valido si el ObjectRecord puede ser leido
-	private boolean checkObjRecToWrite(ObjectRecord objRec) {
+	//TODO poner la firma del metodo en privado???
+	public boolean checkObjRecToWrite(ObjectRecord objRec) {
 
-		if(objRec.getResultStatus().equals(ObjectRecord.ResultStatus.ERROR)){
-			
-			//TODO: Terminar el procesamiento del oRec y continuar con el siguiente.
-			//		addLog(objRec);
-			
+		if(objRec.getResultStatus().equals(ObjectRecord.ResultStatus.ERROR)){			
+			logger.error("La operacion [ " + objRec.getRecordId() + " ] esta en estado de error. No se puede continuar el procesamiento.");
 			return false;
 		}
 		
 		for (OutputRecord outRec : objRec.getOutputRecords()) {
 			if(!typesOutput.contains(outRec)) {
-				//TODO:	Genero LOg indicando el numero de operacion(atributo de ObjectRecord)
-				//  	y que el mismo contenia un outputType desconocido
-				//		Termino el procesamiento
-				//		addLog(objRec,outRec);
-				
+				logger.error("La operacion [ " + objRec.getRecordId() + " ] contiene un OutputType desconocido.");				
 				return false;
+			}else{
+				//TODO: Generará log indicando el registro (número de operación) y la cantidad de output record types de cada tipo generado.
 			}
+			
 		}
 		
 		return true;
@@ -138,10 +136,9 @@ public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
 	// writing to target file
 	
 	@SuppressWarnings("unchecked")
-	public void write(List<? extends ObjectRecord> items) throws Exception {
+	public void write(List<ObjectRecord> items) throws Exception {
 			oRecList = (List<ObjectRecord>) items;
 			
-			// TODO Auto-generated method stub
 			for (ObjectRecord objRec : items) {
 				try{
 					if(checkObjRecToWrite(objRec)){
@@ -155,20 +152,5 @@ public class RecordWriterMultiplexor implements IRecordWriter<ObjectRecord> {
 			}
 			
 		}
-	
-	
-	
-	/**
-	 * Generaciones de Log(clase aparte o dependencia de otro Logger????
-	 */
-	/*
-	private void addLog(ObjectRecord objRec) {
-		System.out.print("El ORec presenta un estado de Error y no puede ser procesado.");
-		
-	}
-	private void addLog(ObjectRecord objRec, OutputRecord outRec) {
-		System.out.print("el O-Rec tiene inconsistencia con el tipo de output que se quiere generar "+ objRec.toString() + "--" + outRec.getType());
-	}	
-	*/
 	
 }

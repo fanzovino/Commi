@@ -15,41 +15,6 @@
 			</batch:tasklet>
 		</batch:step>
 	</batch:job> 
-	<!-- Defino el writer generador de outputs -->
-	<bean id= "writer" class = "ar.com.telefonica.ws.amdocs.engine.RecordWriterMultiplexor" >
-	  <!-- Injeccion de los types a manejar // properties e instancia de RecordWriterMultiplexor -->
-	  <property name="typesOutput">
-			<list value-type="ar.com.telefonica.ws.amdocs.engine.OutputRecord" >
-				<ref bean="outPutTypeFile"/>
-			
-			</list>	  
-	  </property>
 	
-	</bean>
-	
-	<bean id="outPutTypeFile" class = "ar.com.telefonica.ws.amdocs.engine.OutputRecord">
-	<!-- Los distintos class para los tipos de Output a generar -->
-		<property name="output1"><value>File1</value></property>
-		<property name="output2"><value>File2</value></property>
-		<property name="output3"><value>File3</value></property>
-		<property name="output4"><value>File4</value></property>
-		<property name="output5"><value>File5</value></property>
-	</bean>
-	
-	
-	<!-- 
-	
-	<batch:job id="jobF" job-repository="">
-		<batch:step id="s1">
-			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
-				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
-			</batch:tasklet>		
-		</batch:step>
-		<batch:step id="s2">
-			<batch:tasklet transaction-manager="transactionManager" start-limit="2">
-				<batch:chunk reader="reader" writer="writer" commit-interval="2"/>
-			</batch:tasklet>		
-		</batch:step>
-	</batch:job>
- -->
+
 </beans>

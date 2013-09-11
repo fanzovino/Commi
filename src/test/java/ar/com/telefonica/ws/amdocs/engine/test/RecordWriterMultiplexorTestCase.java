@@ -23,11 +23,14 @@ package ar.com.telefonica.ws.amdocs.engine.test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
 import ar.com.telefonica.ws.amdocs.engine.ObjectRecord;
+import ar.com.telefonica.ws.amdocs.engine.OutputRecord;
 import ar.com.telefonica.ws.amdocs.engine.RecordWriterGeneric;
 import ar.com.telefonica.ws.amdocs.engine.RecordWriterMultiplexor;
 
@@ -41,7 +44,7 @@ public class RecordWriterMultiplexorTestCase {
 	// test input values:
 	RecordWriterGeneric generator;
 	
-	List<String> typesOutput  = new ArrayList<String>();
+	List<OutputRecord> typesOutput  = new ArrayList<OutputRecord>();
 	List<ObjectRecord> oRecList = new ArrayList<ObjectRecord>();
 	
 	
@@ -79,14 +82,90 @@ public class RecordWriterMultiplexorTestCase {
 	
 	/*
 	 * writing:
+	 * Es el encargado validar el ObjRec.
+	 * Si el ObjRec esta en ERROR genero el log de error con el numero de operacion.
+	 * Si el OutPutType del ObjRecord no esta en el listado genero el log apropiado.
+	 * Envio el ObjRecord a la clase RecordWriterGeneric.
 	 */
 	
+	
 	@Test
-	public void testWrite() {
+	public void testWriteOk() {
+		ObjectRecord oRec = new ObjectRecord();
+		OutputRecord outPutRec = new OutputRecord("outPutRec", new HashMap<String, Object>());
+		oRec.addOutputRecord(outPutRec);
+		oRec.setResultStatus(ObjectRecord.ResultStatus.DATA);
+		this.tester = new RecordWriterMultiplexor();
+		this.tester.setTypesOutput((List<OutputRecord>) outPutRec);
+		this.tester.setORecList((List<ObjectRecord>) oRec);
 		
-		// TODO:
+		assertTrue(this.tester.checkObjRecToWrite(oRec));
 		
-		fail("Not yet implemented");
+		
 	}
+	
+	/*
+	 * writing:
+	 * Es el encargado validar el ObjRec.
+	 * Si el ObjRec esta en ERROR genero el log de error con el numero de operacion.
+	 
+	 */
+	@Test
+	public void testWriteFailObjectRecordERRORStatus() {
+		ObjectRecord oRec = new ObjectRecord();
+		OutputRecord outPutRec = new OutputRecord("outPutRec", new HashMap<String, Object>());
+		oRec.addOutputRecord(outPutRec);
+		oRec.setResultStatus(ObjectRecord.ResultStatus.ERROR);
+		this.tester = new RecordWriterMultiplexor();
+		this.tester.setTypesOutput((List<OutputRecord>) outPutRec);
+		this.tester.setORecList((List<ObjectRecord>) oRec);
+		
+		//Devuelvo false para el objRecord en Error
+		assertFalse(this.tester.checkObjRecToWrite(oRec));
+		
+		
+	}
+	
+	/*
+	 * writing:
+	 * Es el encargado validar el ObjRec.
+	 * Si el OutPutType del ObjRecord no esta en el listado genero el log apropiado.	 
+	 */
+	@Test
+	public void testWriteFailOutputRecordNotContained() {
+		ObjectRecord oRec = new ObjectRecord();
+		OutputRecord outPutRec = new OutputRecord("outPutRec", new HashMap<String, Object>());
+		
+		oRec.addOutputRecord(new OutputRecord("outPutRecFAIL", new HashMap<String, Object>()));
+		oRec.setResultStatus(ObjectRecord.ResultStatus.DATA);
+		this.tester = new RecordWriterMultiplexor();
+		this.tester.setTypesOutput((List<OutputRecord>) outPutRec);
+		this.tester.setORecList((List<ObjectRecord>) oRec);
+		
+		//Devuelvo false para el outputRecord no contenido.
+		assertFalse(this.tester.checkObjRecToWrite(oRec));
+		
+		
+	}
+	
+	
+	
+	/*
+	 * writing:
+	 * Es el encargado validar el ObjRec.
+	 * Si el OutPutType del ObjRecord no esta en el listado genero el log apropiado.	 
+	 */
+	@Test(expected = Exception.class)
+	public void testWriteFailExpectedException() {
+		
+		this.tester = new RecordWriterMultiplexor();
+		//Devuelvo false para el outputRecord no contenido.
+		this.tester.checkObjRecToWrite(new ObjectRecord());
+		
+		
+	}
+	
+	
+	
 
 }

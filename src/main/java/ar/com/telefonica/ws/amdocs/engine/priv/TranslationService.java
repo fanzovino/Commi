@@ -29,10 +29,12 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
+
+
 public abstract class TranslationService {
 	
-
 	static Logger logger = Logger.getLogger(TranslationService.class);
+	
 	/*
 	 * constructors:
 	 */
@@ -52,7 +54,7 @@ public abstract class TranslationService {
 	
 	
 	// extended translations
-	private Map<String, Object> extensions = new HashMap<String, Object>();
+	private Map<String, ITranslationServiceExtension> extensions = new HashMap<String, ITranslationServiceExtension>();
 	
 	
 	
@@ -91,7 +93,7 @@ public abstract class TranslationService {
 	
 	
 	// extensions: set / return a clone of the received object.
-	public void setExtensions(Map<String, Object> extensions) throws IllegalStateException {
+	public void setExtensions(Map<String, ITranslationServiceExtension> extensions) throws UnsupportedOperationException {
 		if (this.extensions != null) {
 			String errMsg = "Extensions map already initialized. Setup not allowed.";
     		logger.warn(errMsg);
@@ -100,10 +102,10 @@ public abstract class TranslationService {
 		
 		//this.extensions = extensions;
 		
-		this.extensions = new HashMap<String, Object>();
+		this.extensions = new HashMap<String, ITranslationServiceExtension>();
 		
 		for(String key : extensions.keySet()) {
-			Object value = extensions.get(key);
+			ITranslationServiceExtension value = extensions.get(key);
 			
 			/* TODO: Clone value object.
 			if (value != null) {
@@ -115,13 +117,13 @@ public abstract class TranslationService {
 		};
 	};
 	
-	public Map<String, Object> getExtensions() {
+	public Map<String, ITranslationServiceExtension> getExtensions() {
 		//return this.extensions;
 		
-		Map<String, Object> ext = new HashMap<String, Object>();
+		Map<String, ITranslationServiceExtension> ext = new HashMap<String, ITranslationServiceExtension>();
 		
 		for(String key : this.extensions.keySet()) {
-			Object value = this.extensions.get(key);
+			ITranslationServiceExtension value = this.extensions.get(key);
 			
 			// TODO: value = ((Cloneable) value).clone();
 			
@@ -186,9 +188,28 @@ public abstract class TranslationService {
 	
 	
 	/*
-	 * abstract process declaration:
+	 * initialization / deinitialization:
 	 */
-	abstract /*synchronized*/ void initialize();
-	abstract /*synchronized*/ void deinitialize();
+	synchronized void initialize() throws Exception {
+		try {
+			// extended translations:
+			for(String key : this.extensions.keySet()) {
+				this.extensions.get(key).initialize();
+			};
+			
+		} catch (Exception e) {
+			//String errMsg = "Could not initialize support services.";
+    		
+			logger.error(e.getMessage());
+			throw e; //new UnsupportedOperationException(errMsg);
+		}
+	};
+	
+	
+	synchronized void deinitialize() {
+		
+		// TODO
+		
+	};
 	
 }
